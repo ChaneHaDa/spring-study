@@ -69,8 +69,6 @@ public class AuthorizationServerConfig {
                     .authorizeHttpRequests((authorize) -> authorize
                             .anyRequest().authenticated()
                     )
-                    // Form login handles the redirect to the login page from the
-                    // authorization server filter chain
                     .formLogin(Customizer.withDefaults());
 
             return http.build();
@@ -92,18 +90,12 @@ public class AuthorizationServerConfig {
             RegisteredClient oidcClient = RegisteredClient.withId(UUID.randomUUID().toString())
                     .clientId("my-client")
                     .clientSecret("{noop}mypassword")
-                    .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
+                    .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_POST)
                     .authorizationGrantType(AuthorizationGrantType.CLIENT_CREDENTIALS)
-//                .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
-//                .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
-//                .redirectUri("http://localhost:3000")
-//                .postLogoutRedirectUri("http://localhost:3000/")
                     .scope(OidcScopes.OPENID)
-//                .scope(OidcScopes.PROFILE)
                     .clientSettings(ClientSettings.builder().requireAuthorizationConsent(true).build())
                     .tokenSettings(TokenSettings.builder().accessTokenTimeToLive(Duration.ofSeconds(360)).build())
                     .build();
-
             return new InMemoryRegisteredClientRepository(oidcClient);
         }
 
