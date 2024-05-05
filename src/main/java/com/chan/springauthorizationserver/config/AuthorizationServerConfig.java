@@ -1,4 +1,4 @@
-package com.chan.springauthorizationserver;
+package com.chan.springauthorizationserver.config;
 
 import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jose.jwk.RSAKey;
@@ -15,6 +15,8 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.password.NoOpPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.security.oauth2.core.ClientAuthenticationMethod;
 import org.springframework.security.oauth2.core.oidc.OidcScopes;
@@ -75,17 +77,6 @@ public class AuthorizationServerConfig {
         }
 
         @Bean
-        public UserDetailsService userDetailsService() {
-            UserDetails userDetails = User.withDefaultPasswordEncoder()
-                    .username("user")
-                    .password("password")
-                    .roles("USER")
-                    .build();
-
-            return new InMemoryUserDetailsManager(userDetails);
-        }
-
-        @Bean
         public RegisteredClientRepository registeredClientRepository() {
             RegisteredClient oidcClient = RegisteredClient.withId(UUID.randomUUID().toString())
                     .clientId("my-client")
@@ -93,8 +84,8 @@ public class AuthorizationServerConfig {
                     .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_POST)
                     .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
                     .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
-                    .redirectUri("http://localhost:8080")
-                    .postLogoutRedirectUri("http://localhost:8080/")
+                    .redirectUri("http://localhost:3000")
+                    .postLogoutRedirectUri("http://localhost:3000/")
                     .scope(OidcScopes.OPENID)
                     .clientSettings(ClientSettings.builder().requireAuthorizationConsent(true).build())
                     .tokenSettings(TokenSettings.builder().accessTokenTimeToLive(Duration.ofSeconds(360)).build())
@@ -137,6 +128,11 @@ public class AuthorizationServerConfig {
         @Bean
         public AuthorizationServerSettings authorizationServerSettings() {
             return AuthorizationServerSettings.builder().build();
+        }
+
+        @Bean
+        public PasswordEncoder passwordEncoder() {
+            return NoOpPasswordEncoder.getInstance();
         }
 
     }
