@@ -1,4 +1,4 @@
-package com.chan.springauthorizationserver.authority;
+package com.chan.springauthorizationserver.user.authority;
 
 public class AuthorityDTO {
     private Long id;

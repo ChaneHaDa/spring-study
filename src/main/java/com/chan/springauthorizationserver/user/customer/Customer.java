@@ -1,6 +1,6 @@
-package com.chan.springauthorizationserver.customer;
+package com.chan.springauthorizationserver.user.customer;
 
-import com.chan.springauthorizationserver.authority.Authority;
+import com.chan.springauthorizationserver.user.authority.Authority;
 import jakarta.persistence.*;
 
 import java.util.Set;

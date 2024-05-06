@@ -1,6 +1,6 @@
-package com.chan.springauthorizationserver.customer;
+package com.chan.springauthorizationserver.user.customer;
 
-import com.chan.springauthorizationserver.authority.Authority;
+import com.chan.springauthorizationserver.user.authority.Authority;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;

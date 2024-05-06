@@ -1,4 +1,4 @@
-package com.chan.springauthorizationserver.customer;
+package com.chan.springauthorizationserver.user.customer;
 
 public class CustomerDTO {
     private Long id;

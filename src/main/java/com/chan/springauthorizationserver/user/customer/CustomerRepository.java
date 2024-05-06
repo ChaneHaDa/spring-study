@@ -1,4 +1,4 @@
-package com.chan.springauthorizationserver.customer;
+package com.chan.springauthorizationserver.user.customer;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

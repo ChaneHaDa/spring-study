@@ -12,9 +12,6 @@ import org.springframework.http.MediaType;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
@@ -29,7 +26,6 @@ import org.springframework.security.oauth2.server.authorization.config.annotatio
 import org.springframework.security.oauth2.server.authorization.settings.AuthorizationServerSettings;
 import org.springframework.security.oauth2.server.authorization.settings.ClientSettings;
 import org.springframework.security.oauth2.server.authorization.settings.TokenSettings;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 import org.springframework.security.web.util.matcher.MediaTypeRequestMatcher;
@@ -76,23 +72,23 @@ public class AuthorizationServerConfig {
             return http.build();
         }
 
-        @Bean
-        public RegisteredClientRepository registeredClientRepository() {
-            RegisteredClient oidcClient = RegisteredClient.withId(UUID.randomUUID().toString())
-                    .clientId("my-client")
-                    .clientSecret("{noop}mypassword")
-                    .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_POST)
-                    .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
-                    .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
-                    .redirectUri("http://localhost:3000")
-                    .postLogoutRedirectUri("http://localhost:3000/")
-                    .scope(OidcScopes.OPENID)
-                    .clientSettings(ClientSettings.builder().requireAuthorizationConsent(true).build())
-                    .tokenSettings(TokenSettings.builder().accessTokenTimeToLive(Duration.ofSeconds(360)).build())
-                    .build();
-
-            return new InMemoryRegisteredClientRepository(oidcClient);
-        }
+//        @Bean
+//        public RegisteredClientRepository registeredClientRepository() {
+//            RegisteredClient oidcClient = RegisteredClient.withId(UUID.randomUUID().toString())
+//                    .clientId("my-client")
+//                    .clientSecret("{noop}mypassword")
+//                    .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_POST)
+//                    .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
+//                    .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
+//                    .redirectUri("http://localhost:3000")
+//                    .postLogoutRedirectUri("http://localhost:3000/")
+//                    .scope(OidcScopes.OPENID)
+//                    .clientSettings(ClientSettings.builder().requireAuthorizationConsent(true).build())
+//                    .tokenSettings(TokenSettings.builder().accessTokenTimeToLive(Duration.ofSeconds(360)).build())
+//                    .build();
+//
+//            return new InMemoryRegisteredClientRepository(oidcClient);
+//        }
 
         @Bean
         public JWKSource<SecurityContext> jwkSource() {
