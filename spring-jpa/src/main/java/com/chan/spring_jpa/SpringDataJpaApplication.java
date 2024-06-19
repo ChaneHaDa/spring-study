@@ -14,12 +14,12 @@ public class SpringDataJpaApplication {
 		SpringApplication.run(SpringDataJpaApplication.class, args);
 	}
 
-	@Bean
-	CommandLineRunner runner(PersonRepository personRepository) {
-		return args -> {
-			Person person = new Person(null, "Chan");
-			personRepository.save(person);
-		};
-	}
+//	@Bean
+//	CommandLineRunner runner(PersonRepository personRepository) {
+//		return args -> {
+//			Person person = new Person(null, "Chan", 25, "ADMIN");
+//			personRepository.save(person);
+//		};
+//	}
 
 }
