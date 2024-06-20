@@ -1,5 +1,6 @@
 package com.chan.spring_jpa.jpa.entity;
 
+import com.chan.spring_jpa.constant.RoleType;
 import jakarta.persistence.*;
 
 @Entity
@@ -14,47 +15,32 @@ public class Person {
     private String name;
     private Integer age;
     @Enumerated(EnumType.STRING)
-    private String role;
+    private RoleType role;
+    @Transient
+    private String firstName;
+    @Transient
+    private String lastName;
+
+    @Access(AccessType.PROPERTY)
+    public String getFullName() {
+        return firstName + lastName;
+    }
+
+    public void setFullName(String fullName) {
+        this.firstName = fullName.substring(0, fullName.indexOf(" "));
+        this.lastName = fullName.substring(fullName.indexOf(" ") + 1);
+    }
 
     public Person() {
     }
 
-    public Person(Long id, String name, Integer age, String role) {
+    public Person(Long id, String name, Integer age, RoleType role, String firstName, String lastName) {
         this.id = id;
         this.name = name;
         this.age = age;
         this.role = role;
+        this.firstName = firstName;
+        this.lastName = lastName;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Integer getAge() {
-        return age;
-    }
-
-    public void setAge(Integer age) {
-        this.age = age;
-    }
-
-    public String getRole() {
-        return role;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
-    }
 }
