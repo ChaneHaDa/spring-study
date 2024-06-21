@@ -1,13 +1,46 @@
 package com.chan.spring_jpa;
 
+import com.chan.spring_jpa.constant.OrderStatus;
+import com.chan.spring_jpa.jpa.entity.Item;
+import com.chan.spring_jpa.jpa.entity.Member;
+import com.chan.spring_jpa.jpa.entity.Order;
+import com.chan.spring_jpa.jpa.entity.OrderItem;
+import com.chan.spring_jpa.jpa.repository.ItemRepository;
+import com.chan.spring_jpa.jpa.repository.MemberRepository;
+import com.chan.spring_jpa.jpa.repository.OrderItemRepository;
+import com.chan.spring_jpa.jpa.repository.OrderRepository;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
 class SpringDataJpaApplicationTests {
 
+	@Autowired
+	private ItemRepository itemRepository;
+	@Autowired
+	private MemberRepository memberRepository;
+	@Autowired
+	private OrderRepository orderRepository;
+	@Autowired
+	private OrderItemRepository orderItemRepository;
+
 	@Test
-	void contextLoads() {
+	void addData() {
+		Item item = new Item("item1", 1000, 10);
+		Member member = new Member("member1", "city1", "street1", "zipcode1");
+		Order order = new Order(OrderStatus.ORDER);
+		OrderItem orderItem = new OrderItem(1000, 10);
+
+		Member savedMember = memberRepository.save(member);
+		Item savedItem = itemRepository.save(item);
+
+		order.setMember(savedMember);
+		Order savedOrder = orderRepository.save(order);
+
+		orderItem.setItem(savedItem);
+		orderItem.setOrder(savedOrder);
+		orderItemRepository.save(orderItem);
 	}
 
 }
