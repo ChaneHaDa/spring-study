@@ -1,6 +1,6 @@
-package com.chan.spring_jpa.jpa.entity;
+package com.chan.spring_jpa.mapping1.entity;
 
-import com.chan.spring_jpa.constant.OrderStatus;
+import com.chan.spring_jpa.mapping1.constant.OrderStatus;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;

@@ -1,4 +1,4 @@
-package com.chan.spring_jpa.jpa.entity;
+package com.chan.spring_jpa.mapping1.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

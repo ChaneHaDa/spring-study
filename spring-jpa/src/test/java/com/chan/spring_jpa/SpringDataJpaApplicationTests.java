@@ -1,14 +1,14 @@
 package com.chan.spring_jpa;
 
-import com.chan.spring_jpa.constant.OrderStatus;
-import com.chan.spring_jpa.jpa.entity.Item;
-import com.chan.spring_jpa.jpa.entity.Member;
-import com.chan.spring_jpa.jpa.entity.Order;
-import com.chan.spring_jpa.jpa.entity.OrderItem;
-import com.chan.spring_jpa.jpa.repository.ItemRepository;
-import com.chan.spring_jpa.jpa.repository.MemberRepository;
-import com.chan.spring_jpa.jpa.repository.OrderItemRepository;
-import com.chan.spring_jpa.jpa.repository.OrderRepository;
+import com.chan.spring_jpa.mapping1.constant.OrderStatus;
+import com.chan.spring_jpa.mapping1.entity.Item;
+import com.chan.spring_jpa.mapping1.entity.Member;
+import com.chan.spring_jpa.mapping1.entity.Order;
+import com.chan.spring_jpa.mapping1.entity.OrderItem;
+import com.chan.spring_jpa.mapping1.repository.ItemRepository;
+import com.chan.spring_jpa.mapping1.repository.MemberRepository;
+import com.chan.spring_jpa.mapping1.repository.OrderItemRepository;
+import com.chan.spring_jpa.mapping1.repository.OrderRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
