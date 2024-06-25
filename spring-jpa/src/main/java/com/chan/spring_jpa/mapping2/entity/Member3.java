@@ -9,4 +9,11 @@ public class Member3 {
     @GeneratedValue
     private Long id;
     private String username;
+
+    public Member3() {
+    }
+
+    public Member3(String username) {
+        this.username = username;
+    }
 }

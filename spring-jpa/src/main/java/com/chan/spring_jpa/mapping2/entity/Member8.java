@@ -13,6 +13,10 @@ public class Member8 {
     @Id
     @GeneratedValue
     private Long id;
-    @OneToMany(mappedBy = "member8")
+    @OneToMany(mappedBy = "member")
     private List<MemberProduct8> memberProducts;
+
+    public Member8() {
+    }
+
 }

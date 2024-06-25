@@ -13,4 +13,11 @@ public class Locker6 {
     @OneToOne
     @JoinColumn(name = "MEMBER6_ID")
     private Member6 member;
+
+    public Locker6() {
+    }
+
+    public Locker6(String name) {
+        this.name = name;
+    }
 }

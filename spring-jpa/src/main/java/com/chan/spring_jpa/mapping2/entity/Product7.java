@@ -11,4 +11,11 @@ public class Product7 {
     @GeneratedValue
     private Long id;
     private String name;
+
+    public Product7() {
+    }
+
+    public Product7(String name) {
+        this.name = name;
+    }
 }

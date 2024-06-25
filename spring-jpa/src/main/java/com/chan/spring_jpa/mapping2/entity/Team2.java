@@ -15,19 +15,21 @@ public class Team2 {
     @GeneratedValue
     private Long id;
     private String name;
-    //양방향 매핑시
-    @OneToMany(mappedBy = "team2")
+    @OneToMany(mappedBy = "team")
     private List<Member2> members = new ArrayList<>();
 
-    //양방향 매핑시
+    public Team2() {
+    }
+
+    public Team2(String name) {
+        this.name = name;
+    }
+
     public void addMember(Member2 member) {
         this.members.add(member);
         if(member.getTeam() != this){
             member.setTeam(this);
         }
-    }
-
-    public Team2() {
     }
 
     public Long getId() {

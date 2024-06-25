@@ -16,4 +16,11 @@ public class Team3 {
     @OneToMany
     @JoinColumn(name = "TEAM3_ID")
     private List<Member3> members = new ArrayList<>();
+
+    public Team3() {
+    }
+
+    public Team3(String name) {
+        this.name = name;
+    }
 }

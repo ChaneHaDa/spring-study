@@ -12,4 +12,11 @@ public class Member4 {
     @OneToOne
     @JoinColumn(name = "LOCKER4_ID")
     private Locker4 locker;
+
+    public Member4() {
+    }
+
+    public Member4(String username) {
+        this.username = username;
+    }
 }

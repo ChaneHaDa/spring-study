@@ -12,6 +12,12 @@ public class Locker5 {
     @GeneratedValue
     private Long id;
     private String name;
-    @OneToOne(mappedBy = "locker5")
+    @OneToOne(mappedBy = "locker")
     private Member5 member;
+
+    public Locker5() {
+    }
+    public Locker5(String name) {
+        this.name = name;
+    }
 }

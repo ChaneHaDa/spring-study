@@ -15,4 +15,13 @@ public class Order8 {
     @JoinColumn(name = "PRODUCT8_ID")
     private Product8 product;
     private int orderAmount;
+
+    public Order8() {
+    }
+
+    public Order8(Member8 member, Product8 product, int orderAmount) {
+        this.member = member;
+        this.product = product;
+        this.orderAmount = orderAmount;
+    }
 }

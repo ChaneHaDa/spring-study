@@ -9,6 +9,13 @@ public class Member6 {
     @GeneratedValue
     private Long id;
     private String username;
-    @OneToOne(mappedBy = "member6")
+    @OneToOne(mappedBy = "member")
     private Locker6 locker;
+
+    public Member6() {
+    }
+
+    public Member6(String username) {
+        this.username = username;
+    }
 }

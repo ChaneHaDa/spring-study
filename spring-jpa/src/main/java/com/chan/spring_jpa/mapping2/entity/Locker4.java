@@ -11,4 +11,10 @@ public class Locker4 {
     @GeneratedValue
     private Long id;
     private String name;
+
+    public Locker4() {
+    }
+    public Locker4(String name) {
+        this.name = name;
+    }
 }
