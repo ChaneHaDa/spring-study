@@ -12,4 +12,7 @@ public class Child3 {
     @JoinColumn(name = "parent3_id")
     private Parent3 parent;
     private String name;
+
+    public Child3() {
+    }
 }

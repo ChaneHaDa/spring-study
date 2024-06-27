@@ -11,4 +11,8 @@ public class BoardDetail {
     @JoinColumn(name = "BOARD_ID")
     private Board board;
     private String content;
+
+    public BoardDetail() {
+    }
+
 }

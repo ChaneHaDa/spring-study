@@ -15,4 +15,6 @@ public class Parent5 {
             inverseJoinColumns = @JoinColumn(name = "child5_id"))
     private Child5 child;
 
+    public Parent5() {
+    }
 }

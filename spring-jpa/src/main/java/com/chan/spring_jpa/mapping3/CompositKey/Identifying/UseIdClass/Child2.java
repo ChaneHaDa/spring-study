@@ -11,9 +11,10 @@ public class Child2 {
         @ManyToOne
         @JoinColumn(name = "parent2_id")
         public Parent2 parent;
-
         @Id
         private String childId;
-
         private String name;
+
+        public Child2() {
+        }
 }

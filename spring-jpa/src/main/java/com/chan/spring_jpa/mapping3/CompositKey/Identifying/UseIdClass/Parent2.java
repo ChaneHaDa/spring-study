@@ -10,4 +10,7 @@ public class Parent2 {
     @Id
     private String id;
     private String name;
+
+    public Parent2() {
+    }
 }

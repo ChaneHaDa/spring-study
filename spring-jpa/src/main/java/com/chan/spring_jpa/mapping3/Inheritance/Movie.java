@@ -10,4 +10,7 @@ import jakarta.persistence.Entity;
 public class Movie extends Item1 {
     private String director;
     private String actor;
+
+    public Movie() {
+    }
 }

@@ -11,4 +11,7 @@ public class Child8 {
     @GeneratedValue
     private Long id;
     private String name;
+
+    public Child8() {
+    }
 }

@@ -9,4 +9,7 @@ import jakarta.persistence.Entity;
 @DiscriminatorValue("A")
 public class Album extends Item1 {
     private String artist;
+
+    public Album() {
+    }
 }

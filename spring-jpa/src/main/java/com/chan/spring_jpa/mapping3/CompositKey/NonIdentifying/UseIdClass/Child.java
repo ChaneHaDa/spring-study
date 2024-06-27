@@ -13,4 +13,7 @@ public class Child {
             @JoinColumn(name = "parent_id2", referencedColumnName = "id2")
     })
     private Parent parent;
+
+    public Child() {
+    }
 }

@@ -16,4 +16,7 @@ public class Parent7 {
     private String name;
     @OneToMany(mappedBy = "parent")
     private List<Child7> child;
+
+    public Parent7() {
+    }
 }

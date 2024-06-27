@@ -12,4 +12,7 @@ import jakarta.persistence.PrimaryKeyJoinColumn;
 public class Book extends Item1 {
     private String author;
     private String isbn;
+
+    public Book() {
+    }
 }

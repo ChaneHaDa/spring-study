@@ -11,4 +11,7 @@ public abstract class Item3 {
     private Long id;
     private String name;
     private int price;
+
+    public Item3() {
+    }
 }

@@ -12,4 +12,7 @@ public class Child6 {
     private Long id;
     private String name;
 
+    public Child6() {
+    }
+
 }

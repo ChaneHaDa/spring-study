@@ -10,4 +10,7 @@ public class Parent3 {
     private String id;
     private String name;
 
+    public Parent3() {
+    }
+
 }

@@ -6,8 +6,10 @@ import jakarta.persistence.Entity;
 // 복합키 비식별 매핑 @EmbeddId 사용
 @Entity
 public class Parent1 {
-
     @EmbeddedId
     private ParentId1 id;
     private String name;
+
+    public Parent1() {
+    }
 }

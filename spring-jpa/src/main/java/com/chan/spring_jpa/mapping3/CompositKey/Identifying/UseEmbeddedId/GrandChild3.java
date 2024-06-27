@@ -15,4 +15,7 @@ public class GrandChild3 {
     })
     private Child3 child;
     private String name;
+
+    public GrandChild3() {
+    }
 }

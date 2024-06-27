@@ -14,4 +14,12 @@ public class Board {
     private String title;
     @OneToOne(mappedBy = "board")
     private BoardDetail boardDetail;
+
+    public Board() {
+    }
+
+    public Board(String title) {
+        this.title = title;
+    }
+
 }

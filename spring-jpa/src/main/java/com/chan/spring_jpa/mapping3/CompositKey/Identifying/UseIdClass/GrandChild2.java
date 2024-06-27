@@ -14,9 +14,10 @@ public class GrandChild2 {
             @JoinColumn(name = "child2_id")
     })
     private Child2 child;
-
     @Id
-    private String grandChildId;
-
+    private String id;
     private String name;
+
+    public GrandChild2() {
+    }
 }

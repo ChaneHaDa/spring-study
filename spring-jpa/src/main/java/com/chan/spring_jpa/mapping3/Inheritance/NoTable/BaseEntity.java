@@ -11,4 +11,8 @@ public abstract class BaseEntity {
     @GeneratedValue
     private Long id;
     private String name;
+
+    public BaseEntity() {
+    }
+
 }

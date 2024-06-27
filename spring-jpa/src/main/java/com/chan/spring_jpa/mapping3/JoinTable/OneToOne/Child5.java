@@ -15,4 +15,8 @@ public class Child5 {
     // 양방향 필요시
     @OneToOne(mappedBy = "child")
     private Parent5 parent;
+
+    public Child5() {
+    }
+
 }

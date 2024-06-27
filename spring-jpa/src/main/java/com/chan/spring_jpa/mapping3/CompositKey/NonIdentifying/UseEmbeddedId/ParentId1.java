@@ -9,7 +9,6 @@ import java.util.Objects;
 // 복합키 비식별 매핑 @EmbeddId 사용
 @Embeddable
 public class ParentId1 implements Serializable {
-
     @Column
     private String id1;
     @Column

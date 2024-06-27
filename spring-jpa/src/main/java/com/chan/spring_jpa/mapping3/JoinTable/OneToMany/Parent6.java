@@ -16,4 +16,7 @@ public class Parent6 {
             joinColumns = @JoinColumn(name = "parent6_id"),
             inverseJoinColumns = @JoinColumn(name = "child6_id"))
     private List<Child6> child;
+
+    public Parent6() {
+    }
 }

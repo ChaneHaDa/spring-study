@@ -6,4 +6,7 @@ import jakarta.persistence.Entity;
 @Entity
 public class ESeller extends BaseEntity {
     private String shopName;
+
+    public ESeller() {
+    }
 }

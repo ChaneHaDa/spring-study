@@ -14,4 +14,7 @@ import jakarta.persistence.Entity;
 })
 public class EMember extends BaseEntity {
     private String email;
+
+    public EMember() {
+    }
 }

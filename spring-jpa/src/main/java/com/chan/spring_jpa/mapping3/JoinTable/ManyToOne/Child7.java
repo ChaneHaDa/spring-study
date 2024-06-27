@@ -14,4 +14,7 @@ public class Child7 {
             joinColumns = @JoinColumn(name = "child7_id"),
             inverseJoinColumns = @JoinColumn(name = "parent7_id"))
     private Parent7 parent;
+
+    public Child7() {
+    }
 }

@@ -13,4 +13,7 @@ public class Parent {
     @Id
     private String id2;
     private String name;
+
+    public Parent() {
+    }
 }

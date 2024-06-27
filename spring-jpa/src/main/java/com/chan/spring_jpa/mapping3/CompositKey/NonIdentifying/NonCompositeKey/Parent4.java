@@ -11,4 +11,7 @@ public class Parent4 {
     @GeneratedValue
     private Long id;
     private String name;
+
+    public Parent4() {
+    }
 }
