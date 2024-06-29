@@ -11,4 +11,7 @@ public class LoTeam {
     @GeneratedValue
     private Long id;
     private String name;
+
+    public LoTeam() {
+    }
 }

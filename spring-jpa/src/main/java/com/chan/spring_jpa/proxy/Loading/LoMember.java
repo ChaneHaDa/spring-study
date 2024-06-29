@@ -12,11 +12,13 @@ public class LoMember {
     private Long id;
     private String username;
     private int age;
-
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "LOTEAM_ID", nullable = false) // 내부 조인을 사용
     private LoTeam team;
-
     @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
     private List<LoOrders> orders;
+
+    public LoMember() {
+    }
+
 }

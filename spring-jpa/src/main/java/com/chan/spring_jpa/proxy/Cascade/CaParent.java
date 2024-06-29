@@ -18,4 +18,7 @@ public class CaParent {
     // CascadeType.ALL + orphanRemoval = true -> 부모 엔티티를 통해서 생명주기를 관리가 가능
     @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CaChild> children;
+
+    public CaParent() {
+    }
 }
