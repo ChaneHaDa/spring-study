@@ -15,4 +15,26 @@ public class Product {
 
     public Product() {
     }
+
+    public Product(String name, int price, int stockAmount) {
+        this.name = name;
+        this.price = price;
+        this.stockAmount = stockAmount;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public int getPrice() {
+        return price;
+    }
+
+    public int getStockAmount() {
+        return stockAmount;
+    }
 }
