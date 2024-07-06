@@ -78,4 +78,47 @@ public class TestController {
 
         return "projection";
     }
+
+    @GetMapping("/set")
+    public String set() {
+        //집합함수
+        String jpql = "SELECT COUNT(m), SUM(m.age), AVG(m.age), MAX(m.age), MIN(m.age) FROM Member m";
+        Query query = em.createQuery(jpql);
+        Object[] statistics = (Object[]) query.getSingleResult();
+        Long count = (Long) statistics[0];
+        Long sumAge = (Long) statistics[1];
+        Double avgAge = (Double) statistics[2];
+        Integer maxAge = (Integer) statistics[3];
+        Integer minAge = (Integer) statistics[4];
+
+        String result = String.format("Member count: %d, Sum of ages: %d, Average age: %.2f, Max age: %d, Min age: %d",
+                count, sumAge, avgAge, maxAge, minAge);
+
+        System.out.println(result);
+
+        return "set";
+    }
+
+    @GetMapping("/group")
+    public String group() {
+        //group by having
+        String jpql = "SELECT t.name, COUNT(m.age), SUM(m.age), AVG(m.age), MAX(m.age), MIN(m.age) FROM Member m JOIN m.team t GROUP BY t.name HAVING COUNT(m.age) >= 2";
+        List<Object[]> resultList = em.createQuery(jpql).getResultList();
+        for(Object[] row : resultList){
+            String teamName = (String) row[0];
+            Long count = (Long) row[1];
+            Long sumAge = (Long) row[2];
+            Double avgAge = (Double) row[3];
+            Integer maxAge = (Integer) row[4];
+            Integer minAge = (Integer) row[5];
+
+            String result = String.format("Team name: %s, Member count: %d, Sum of ages: %d, Average age: %.2f, Max age: %d, Min age: %d",
+                    teamName, count, sumAge, avgAge, maxAge, minAge);
+
+            System.out.println(result);
+        }
+
+        return "group";
+    }
+
 }
