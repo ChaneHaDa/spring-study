@@ -11,12 +11,12 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-public class TestController {
+public class JpqlController {
 
     @PersistenceContext
     private final EntityManager em;
 
-    public TestController(EntityManager em) {
+    public JpqlController(EntityManager em) {
         this.em = em;
     }
 
@@ -167,8 +167,35 @@ public class TestController {
             System.out.println("username = " + member.getUsername() + ", team name = " + member.getTeam().getName());
         }
 
-
         return "join";
+    }
+
+    @GetMapping("/sub")
+    public String subQuery(){
+        //서브쿼리
+        String jpql = "SELECT m FROM Member m WHERE m.age > (SELECT AVG(m2.age) FROM Member m2)";
+        List<Member> resultList = em.createQuery(jpql, Member.class).getResultList();
+        for(Member member : resultList){
+            System.out.println("username = " + member.getUsername() + ", age = " + member.getAge());
+        }
+
+        return "sub";
+    }
+
+    @GetMapping("/case")
+    public String caseQuery(){
+        String jpql = "SELECT " +
+                "CASE WHEN m.age <= 10 THEN '학생요금' " +
+                "     WHEN m.age >= 60 THEN '경로요금' " +
+                "     ELSE '일반요금' " +
+                "END " +
+                "FROM Member m";
+        List<String> result = em.createQuery(jpql, String.class).getResultList();
+        for(String s : result){
+            System.out.println(s);
+        }
+
+        return "case";
     }
 
 }
