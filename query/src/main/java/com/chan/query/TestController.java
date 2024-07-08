@@ -121,4 +121,54 @@ public class TestController {
         return "group";
     }
 
+    @GetMapping("/order")
+    public String order() {
+        //정렬
+        String jpql = "SELECT m FROM Member m ORDER BY m.age DESC";
+        List<Member> resultList = em.createQuery(jpql, Member.class).getResultList();
+        for(Member member : resultList){
+            System.out.println("username = " + member.getUsername() + ", age = " + member.getAge());
+        }
+
+        return "order";
+    }
+
+    @GetMapping("/join")
+    public String join() {
+        //내부조인
+        String jpql = "SELECT m FROM Member m INNER JOIN m.team t " + "WHERE t.name = :teamName";
+        List<Member> resultList = em.createQuery(jpql, Member.class)
+                .setParameter("teamName", "t1")
+                .getResultList();
+        for(Member member : resultList){
+            System.out.println("username = " + member.getUsername() + ", team name = " + member.getTeam().getName());
+        }
+
+        //외부조인
+        String jpql2 = "SELECT m FROM Member m LEFT JOIN m.team t";
+        List<Member> resultList2 = em.createQuery(jpql2, Member.class).getResultList();
+        for(Member member : resultList2){
+            System.out.println("username = " + member.getUsername() + ", team name = " + member.getTeam().getName());
+        }
+
+        //컬렉션 조인
+        String jpql3 = "SELECT t, m FROM Team t LEFT JOIN t.members m";
+        List<Object[]> resultList3 = em.createQuery(jpql3).getResultList();
+        for(Object[] row : resultList3){
+            Team team = (Team) row[0];
+            Member member = (Member) row[1];
+            System.out.println("team name = " + team.getName() + ", member username = " + member.getUsername());
+        }
+
+        //fetch join
+        String jpql4 = "SELECT m FROM Member m JOIN FETCH m.team";
+        List<Member> resultList4 = em.createQuery(jpql4, Member.class).getResultList();
+        for(Member member : resultList4){
+            System.out.println("username = " + member.getUsername() + ", team name = " + member.getTeam().getName());
+        }
+
+
+        return "join";
+    }
+
 }

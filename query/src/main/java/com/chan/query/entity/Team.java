@@ -1,8 +1,8 @@
 package com.chan.query.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+
+import java.util.List;
 
 @Entity
 public class Team {
@@ -10,6 +10,8 @@ public class Team {
     @GeneratedValue
     private Long id;
     private String name;
+    @OneToMany(mappedBy = "team", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Member> members;
 
     public Team() {
     }
