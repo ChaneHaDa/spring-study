@@ -97,4 +97,121 @@ public class CriteriaController {
 
         return "set";
     }
+
+    @GetMapping("/order")
+    public String order() {
+        //select m from Member m order by m.age desc, m.username desc
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Member> cq = cb.createQuery(Member.class);
+        Root<Member> m = cq.from(Member.class);
+
+        cq.orderBy(cb.desc(m.get("age")), cb.desc(m.get("username")));
+
+        List<Member> resultList = em.createQuery(cq).getResultList();
+        for(Member member : resultList) {
+            System.out.println("member = " + member);
+        }
+
+        return "order";
+    }
+
+    @GetMapping("/join")
+    public String join() {
+        //select m from Member m join m.team t
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Member> cq = cb.createQuery(Member.class);
+        Root<Member> m = cq.from(Member.class);
+        Join<Member, Member> t = m.join("team", JoinType.INNER);
+        //m.join("team") -> 내부조인
+        //m.join("team", JoinType.INNER) -> 내부조인
+        //m.join("team", JoinType.LEFT) -> 외부조인
+        //m.fetch("team", JoinType.LEFT) -> 패치조인
+        cq.select(m);
+
+        List<Member> resultList = em.createQuery(cq).getResultList();
+        for(Member member : resultList) {
+            System.out.println("member = " + member);
+        }
+
+        return "join";
+    }
+
+    @GetMapping("/sub")
+    public String subQuery() {
+        //select m from Member m where m.age = (select max(m2.age) from Member m2)
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Member> cq = cb.createQuery(Member.class);
+        Root<Member> m = cq.from(Member.class);
+
+        Subquery<Integer> subQuery = cq.subquery(Integer.class);
+        Root<Member> m2 = subQuery.from(Member.class);
+        subQuery.select(cb.max(m2.get("age")));
+
+        cq.select(m)
+                .where(cb.equal(m.get("age"), subQuery));
+
+        List<Member> resultList = em.createQuery(cq).getResultList();
+        for(Member member : resultList) {
+            System.out.println("member = " + member);
+        }
+
+        return "sub";
+    }
+
+    @GetMapping("/case")
+    public String caseQuery() {
+        //select case when m.age <= 10 then '학생요금' " +
+        // "when m.age >= 60 then '경로요금' " +
+        // "else '일반요금' end " +
+        // "from Member m
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Object> cq = cb.createQuery(Object.class);
+        Root<Member> m = cq.from(Member.class);
+
+        cq.select(
+                cb.selectCase()
+                        .when(cb.le(m.get("age"), 10), "학생요금")
+                        .when(cb.ge(m.get("age"), 60), "경로요금")
+                        .otherwise("일반요금")
+        );
+
+        List<Object> resultList = em.createQuery(cq).getResultList();
+        for(Object s : resultList) {
+            System.out.println("s = " + s);
+        }
+
+        return "case";
+    }
+
+    @GetMapping("/parameter")
+    public String parameter() {
+        //String usernameParam = "m1";
+        //int ageParam = 10;
+        //select m from Member m where m.username = :username and m.age > :age
+        String usernameParam = "m1";
+        int ageParam = 10;
+
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Member> cq = cb.createQuery(Member.class);
+        Root<Member> m = cq.from(Member.class);
+
+        cq.select(m)
+                .where(cb.and(
+                        cb.equal(m.get("username"), cb.parameter(String.class, "username")),
+                        cb.gt(m.get("age"), cb.parameter(Integer.class, "age"))
+                ));
+
+        List<Member> resultList = em.createQuery(cq)
+                .setParameter("username", usernameParam)
+                .setParameter("age", ageParam)
+                .getResultList();
+
+        for(Member member : resultList) {
+            System.out.println("member = " + member);
+        }
+
+        return "parameter";
+    }
+
+
 }
