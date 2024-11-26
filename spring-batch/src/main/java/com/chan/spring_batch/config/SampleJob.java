@@ -22,11 +22,13 @@ public class SampleJob {
                 .start(simpleStep1)
                 .build();
     }
+
     @Bean
     public Step simpleStep1(JobRepository jobRepository, Tasklet testTasklet, PlatformTransactionManager platformTransactionManager){
         return new StepBuilder("simpleStep1", jobRepository)
                 .tasklet(testTasklet, platformTransactionManager).build();
     }
+
     @Bean
     public Tasklet testTasklet(){
         return ((contribution, chunkContext) -> {
@@ -34,4 +36,12 @@ public class SampleJob {
             return RepeatStatus.FINISHED;
         });
     }
+
+//    @Bean
+//    public JobLauncher jobLauncher() throws Exception {
+//        TaskExecutorJobLauncher jobLauncher = new TaskExecutorJobLauncher();
+//        jobLauncher.setJobRepository(jobRepository);
+//        jobLauncher.afterPropertiesSet();
+//        return jobLauncher;
+//    }
 }
