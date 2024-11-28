@@ -19,6 +19,9 @@ public class MainController {
     @Autowired
     Job simpleJob1;
 
+    @Autowired
+    Job simpleJob2;
+
     @RequestMapping("/index/{id}")
     public void handle(@PathVariable("id") String id) throws Exception{
         JobParameters jobParameters = new JobParametersBuilder()
@@ -27,5 +30,15 @@ public class MainController {
                                 .toJobParameters();
 
         jobLauncher.run(simpleJob1, jobParameters);
+    }
+
+    @RequestMapping("/index2/{id}")
+    public void handle2(@PathVariable("id") String id) throws Exception{
+        JobParameters jobParameters = new JobParametersBuilder()
+                .addString("id", id)
+                .addDate("date", new Date())
+                .toJobParameters();
+
+        jobLauncher.run(simpleJob2, jobParameters);
     }
 }

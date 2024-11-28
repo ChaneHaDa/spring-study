@@ -37,6 +37,27 @@ public class SampleJob {
         });
     }
 
+    @Bean
+    public Job simpleJob2(JobRepository jobRepository, Step simpleStep2) {
+        return new JobBuilder("simpleJob2", jobRepository)
+                .start(simpleStep2)
+                .build();
+    }
+
+    @Bean
+    public Step simpleStep2(JobRepository jobRepository, Tasklet testTasklet2, PlatformTransactionManager platformTransactionManager){
+        return new StepBuilder("simpleStep2", jobRepository)
+                .tasklet(testTasklet2, platformTransactionManager).build();
+    }
+
+    @Bean
+    public Tasklet testTasklet2(){
+        return ((contribution, chunkContext) -> {
+            log.info(">>>>> This is Step2");
+            return RepeatStatus.FINISHED;
+        });
+    }
+
 //    @Bean
 //    public JobLauncher jobLauncher() throws Exception {
 //        TaskExecutorJobLauncher jobLauncher = new TaskExecutorJobLauncher();
