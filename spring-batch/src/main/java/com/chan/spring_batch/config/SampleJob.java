@@ -7,10 +7,16 @@ import org.springframework.batch.core.job.builder.JobBuilder;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.step.builder.StepBuilder;
 import org.springframework.batch.core.step.tasklet.Tasklet;
+import org.springframework.batch.item.ItemProcessor;
+import org.springframework.batch.item.ItemReader;
+import org.springframework.batch.item.ItemWriter;
+import org.springframework.batch.item.support.ListItemReader;
 import org.springframework.batch.repeat.RepeatStatus;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.PlatformTransactionManager;
+
+import java.util.Arrays;
 
 @Slf4j
 @Configuration
@@ -58,11 +64,36 @@ public class SampleJob {
         });
     }
 
-//    @Bean
-//    public JobLauncher jobLauncher() throws Exception {
-//        TaskExecutorJobLauncher jobLauncher = new TaskExecutorJobLauncher();
-//        jobLauncher.setJobRepository(jobRepository);
-//        jobLauncher.afterPropertiesSet();
-//        return jobLauncher;
-//    }
+    @Bean
+    public Job chunkJob(JobRepository jobRepository, Step chunkStep) {
+        return new JobBuilder("chunkJob", jobRepository)
+                .start(chunkStep)
+                .build();
+    }
+
+    @Bean
+    public Step chunkStep(JobRepository jobRepository,
+                           PlatformTransactionManager transactionManager) {
+        return new StepBuilder("chunkStep", jobRepository)
+                .<String, String>chunk(10, transactionManager)
+                .reader(itemReader())
+                .writer(itemWriter())
+                .build();
+    }
+
+    @Bean
+    public ItemReader<String> itemReader() {
+        // 문자열을 읽어오는 로직
+        return new ListItemReader<>(Arrays.asList("item1", "item2", "item3"));
+    }
+
+    @Bean
+    public ItemProcessor<String, String> itemProcessor() {
+        return item -> item.toUpperCase(); // 읽은 문자열을 대문자로 변환
+    }
+
+    @Bean
+    public ItemWriter<String> itemWriter() {
+        return items -> items.forEach(System.out::println); // 결과를 콘솔에 출력
+    }
 }

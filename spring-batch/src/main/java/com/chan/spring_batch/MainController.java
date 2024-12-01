@@ -22,8 +22,11 @@ public class MainController {
     @Autowired
     Job simpleJob2;
 
-    @RequestMapping("/index/{id}")
-    public void handle(@PathVariable("id") String id) throws Exception{
+    @Autowired
+    Job chunkJob;
+
+    @RequestMapping("/tasklet1/{id}")
+    public void taskletHandle(@PathVariable("id") String id) throws Exception{
         JobParameters jobParameters = new JobParametersBuilder()
                 .addString("id", id)
                         .addDate("date", new Date())
@@ -32,13 +35,23 @@ public class MainController {
         jobLauncher.run(simpleJob1, jobParameters);
     }
 
-    @RequestMapping("/index2/{id}")
-    public void handle2(@PathVariable("id") String id) throws Exception{
+    @RequestMapping("/tasklet2/{id}")
+    public void taskletHandle2(@PathVariable("id") String id) throws Exception{
         JobParameters jobParameters = new JobParametersBuilder()
                 .addString("id", id)
                 .addDate("date", new Date())
                 .toJobParameters();
 
         jobLauncher.run(simpleJob2, jobParameters);
+    }
+
+    @RequestMapping("/chunk/{id}")
+    public void chunkHandle(@PathVariable("id") String id) throws Exception{
+        JobParameters jobParameters = new JobParametersBuilder()
+                .addString("id", id)
+                .addDate("date", new Date())
+                .toJobParameters();
+
+        jobLauncher.run(chunkJob, jobParameters);
     }
 }
