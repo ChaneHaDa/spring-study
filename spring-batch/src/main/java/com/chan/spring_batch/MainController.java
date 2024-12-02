@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.Date;
 
@@ -36,10 +37,11 @@ public class MainController {
     }
 
     @RequestMapping("/tasklet2/{id}")
-    public void taskletHandle2(@PathVariable("id") String id) throws Exception{
+    public void taskletHandle2(@PathVariable("id") String id, @RequestParam("query") String query) throws Exception{
         JobParameters jobParameters = new JobParametersBuilder()
                 .addString("id", id)
                 .addDate("date", new Date())
+                .addString("logMessage", query)
                 .toJobParameters();
 
         jobLauncher.run(simpleJob2, jobParameters);

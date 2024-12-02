@@ -51,17 +51,22 @@ public class SampleJob {
     }
 
     @Bean
-    public Step simpleStep2(JobRepository jobRepository, Tasklet testTasklet2, PlatformTransactionManager platformTransactionManager){
+    public Step simpleStep2(JobRepository jobRepository, Tasklet testTasklet2, PlatformTransactionManager platformTransactionManager) {
         return new StepBuilder("simpleStep2", jobRepository)
-                .tasklet(testTasklet2, platformTransactionManager).build();
+                .tasklet(testTasklet2, platformTransactionManager)
+                .build();
     }
 
     @Bean
-    public Tasklet testTasklet2(){
-        return ((contribution, chunkContext) -> {
-            log.info(">>>>> This is Step2");
+    public Tasklet testTasklet2() {
+        return (contribution, chunkContext) -> {
+            String logMessage = chunkContext.getStepContext()
+                    .getJobParameters()
+                    .get("logMessage")
+                    .toString();
+            log.info(">>>>> This is Step2 with message: {}", logMessage);
             return RepeatStatus.FINISHED;
-        });
+        };
     }
 
     @Bean
@@ -77,23 +82,23 @@ public class SampleJob {
         return new StepBuilder("chunkStep", jobRepository)
                 .<String, String>chunk(10, transactionManager)
                 .reader(itemReader())
+                .processor(itemProcessor())
                 .writer(itemWriter())
                 .build();
     }
 
     @Bean
     public ItemReader<String> itemReader() {
-        // 문자열을 읽어오는 로직
         return new ListItemReader<>(Arrays.asList("item1", "item2", "item3"));
     }
 
     @Bean
     public ItemProcessor<String, String> itemProcessor() {
-        return item -> item.toUpperCase(); // 읽은 문자열을 대문자로 변환
+        return item -> item.toUpperCase();
     }
 
     @Bean
     public ItemWriter<String> itemWriter() {
-        return items -> items.forEach(System.out::println); // 결과를 콘솔에 출력
+        return items -> items.forEach(System.out::println);
     }
 }
