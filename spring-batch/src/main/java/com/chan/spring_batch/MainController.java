@@ -26,6 +26,9 @@ public class MainController {
     @Autowired
     Job chunkJob;
 
+    @Autowired
+    Job chunkJob2;
+
     @RequestMapping("/tasklet1/{id}")
     public void taskletHandle(@PathVariable("id") String id) throws Exception{
         JobParameters jobParameters = new JobParametersBuilder()
@@ -55,5 +58,15 @@ public class MainController {
                 .toJobParameters();
 
         jobLauncher.run(chunkJob, jobParameters);
+    }
+
+    @RequestMapping("/chunk2/{id}")
+    public void chunkHandle2(@PathVariable("id") String id) throws Exception{
+        JobParameters jobParameters = new JobParametersBuilder()
+                .addString("id", id)
+                .addDate("date", new Date())
+                .toJobParameters();
+
+        jobLauncher.run(chunkJob2, jobParameters);
     }
 }
