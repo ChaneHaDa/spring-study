@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>WebSocket Chat</title>
+    <!-- 수정된 CDN 경로 -->
+    <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+</head>
+<body>
+<div id="chat">
+    <ul id="messages"></ul>
+    <input id="msg" type="text" placeholder="Type a message..." />
+    <button id="sendBtn">Send</button>
+</div>
+
+<script>
+    // 1. CDN 정상 작동 확인 후 연결
+    var socket = new SockJS('/ws-stomp'); // ✅ 서버 엔드포인트와 일치해야 함
+    var stompClient = Stomp.over(socket);
+
+    // 2. 연결 오류 처리 추가
+    stompClient.connect({}, function(frame) {
+        console.log("Connected: " + frame);
+
+        stompClient.subscribe('/topic/public', function(message) {
+            var chatMessage = JSON.parse(message.body);
+            var msgElem = document.createElement('li');
+            msgElem.innerText = chatMessage.sender + ": " + chatMessage.content;
+            document.getElementById('messages').appendChild(msgElem);
+        });
+    }, function(error) {
+        console.error("Connection error: ", error);
+    });
+
+    // 3. 메시지 전송 로직 보강
+    document.getElementById('sendBtn').addEventListener('click', function() {
+        var msgInput = document.getElementById('msg');
+        var content = msgInput.value.trim();
+
+        if(content) {
+            stompClient.send("/app/chat.sendMessage", {}, JSON.stringify({
+                sender: "User1", // 실제 사용자명 입력 필요
+                content: content,
+                type: "CHAT"
+            }));
+            msgInput.value = "";
+        }
+    });
+</script>
+</body>
+</html>
