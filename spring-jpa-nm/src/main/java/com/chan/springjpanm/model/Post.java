@@ -20,6 +20,6 @@ public class Post {
     private String content;
 
     @ManyToMany(cascade = CascadeType.PERSIST)
-    @JoinTable(name = "post_hashtag")
+    @JoinTable(name = "posts_hashtag")
     private Set<Hashtag> hashtags = new HashSet<>();
 }
