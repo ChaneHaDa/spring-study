@@ -2,48 +2,131 @@
 <html>
 <head>
     <title>WebSocket Chat</title>
-    <!-- 수정된 CDN 경로 -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+    <style>
+        #username-page, #chat-page { margin-top: 20px; }
+        #chat-page { display: none; }
+        #messages { list-style-type: none; padding: 0; margin-bottom: 20px; max-height: 300px; overflow-y: auto; border: 1px solid #ddd; padding: 10px; }
+        .event-message { text-align: center; color: #888; }
+        .chat-message { margin-bottom: 10px; }
+    </style>
 </head>
 <body>
-<div id="chat">
-    <ul id="messages"></ul>
-    <input id="msg" type="text" placeholder="Type a message..." />
-    <button id="sendBtn">Send</button>
+
+<div class="container">
+    <div id="username-page">
+        <div class="form-group">
+            <label for="roomId">Room ID</label>
+            <input type="text" id="roomId" class="form-control" placeholder="Enter Room ID">
+        </div>
+        <div class="form-group">
+            <label for="username">Username</label>
+            <input type="text" id="username" class="form-control" placeholder="Enter Username">
+        </div>
+        <button id="enterBtn" class="btn btn-primary">Enter Chat</button>
+    </div>
+
+    <div id="chat-page">
+        <h3 id="room-title"></h3>
+        <ul id="messages"></ul>
+        <div class="input-group">
+            <input id="msg" type="text" class="form-control" placeholder="Type a message...">
+            <div class="input-group-append">
+                <button id="sendBtn" class="btn btn-success">Send</button>
+            </div>
+        </div>
+    </div>
 </div>
 
 <script>
-    // 1. CDN 정상 작동 확인 후 연결
-    var socket = new SockJS('/ws-stomp'); // ✅ 서버 엔드포인트와 일치해야 함
-    var stompClient = Stomp.over(socket);
+    var usernamePage = document.querySelector('#username-page');
+    var chatPage = document.querySelector('#chat-page');
+    var enterBtn = document.querySelector('#enterBtn');
+    var sendBtn = document.querySelector('#sendBtn');
+    var msgInput = document.querySelector('#msg');
+    var messages = document.querySelector('#messages');
+    var roomTitle = document.querySelector('#room-title');
 
-    // 2. 연결 오류 처리 추가
-    stompClient.connect({}, function(frame) {
-        console.log("Connected: " + frame);
+    var stompClient = null;
+    var username = null;
+    var roomId = null;
 
-        stompClient.subscribe('/topic/public', function(message) {
-            var chatMessage = JSON.parse(message.body);
-            var msgElem = document.createElement('li');
-            msgElem.innerText = chatMessage.sender + ": " + chatMessage.content;
-            document.getElementById('messages').appendChild(msgElem);
-        });
-    }, function(error) {
-        console.error("Connection error: ", error);
-    });
+    function connect(event) {
+        username = document.querySelector('#username').value.trim();
+        roomId = document.querySelector('#roomId').value.trim();
 
-    // 3. 메시지 전송 로직 보강
-    document.getElementById('sendBtn').addEventListener('click', function() {
-        var msgInput = document.getElementById('msg');
-        var content = msgInput.value.trim();
+        if (username && roomId) {
+            usernamePage.style.display = 'none';
+            chatPage.style.display = 'block';
+            roomTitle.textContent = `Room: ${roomId}`;
 
-        if(content) {
-            stompClient.send("/app/chat.sendMessage", {}, JSON.stringify({
-                sender: "User1", // 실제 사용자명 입력 필요
-                content: content,
-                type: "CHAT"
-            }));
-            msgInput.value = "";
+            var socket = new SockJS('/ws-stomp');
+            stompClient = Stomp.over(socket);
+            stompClient.connect({}, onConnected, onError);
+        }
+        event.preventDefault();
+    }
+
+    function onConnected() {
+        // 특정 채팅방 구독
+        stompClient.subscribe('/topic/room/' + roomId, onMessageReceived);
+
+        // 서버에 입장 메시지 전송
+        stompClient.send("/app/chat/message", {}, JSON.stringify({
+            roomId: roomId,
+            sender: username,
+            type: 'JOIN'
+        }));
+    }
+
+    function onError(error) {
+        alert('Could not connect to WebSocket server. Please refresh this page to try again!');
+    }
+
+    function sendMessage(event) {
+        var messageContent = msgInput.value.trim();
+        if (messageContent && stompClient) {
+            var chatMessage = {
+                roomId: roomId,
+                sender: username,
+                content: messageContent,
+                type: 'CHAT'
+            };
+            stompClient.send("/app/chat/message", {}, JSON.stringify(chatMessage));
+            msgInput.value = '';
+        }
+        event.preventDefault();
+    }
+
+    function onMessageReceived(payload) {
+        var message = JSON.parse(payload.body);
+        var messageElement = document.createElement('li');
+
+        if (message.type === 'JOIN' || message.type === 'LEAVE') {
+            messageElement.classList.add('event-message');
+            messageElement.textContent = message.content;
+        } else {
+            messageElement.classList.add('chat-message');
+            var usernameElement = document.createElement('strong');
+            usernameElement.textContent = message.sender;
+            messageElement.appendChild(usernameElement);
+
+            var textElement = document.createElement('span');
+            textElement.textContent = `: ${message.content}`;
+            messageElement.appendChild(textElement);
+        }
+
+        messages.appendChild(messageElement);
+        messages.scrollTop = messages.scrollHeight;
+    }
+
+    enterBtn.addEventListener('click', connect, true);
+    sendBtn.addEventListener('click', sendMessage, true);
+    msgInput.addEventListener('keypress', function (e) {
+        if (e.key === 'Enter') {
+            sendMessage(e);
         }
     });
 </script>
