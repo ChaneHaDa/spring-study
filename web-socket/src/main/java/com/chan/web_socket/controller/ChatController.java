@@ -1,31 +1,22 @@
 package com.chan.web_socket.controller;
 
 import com.chan.web_socket.dto.ChatMessage;
-import com.chan.web_socket.service.ChatService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Controller;
 
 @Controller
 @RequiredArgsConstructor
 public class ChatController {
 
-    private final ChatService chatService;
+    private final SimpMessageSendingOperations messagingTemplate;
 
-    // 클라이언트 -> 서버: /app/chat.sendMessage
-    // 서버 -> 클라이언트: /topic/public
-    @MessageMapping("/chat.sendMessage")
-    @SendTo("/topic/public")
-    public ChatMessage sendMessage(ChatMessage message) {
-        return chatService.processMessage(message);
-    }
-
-    // 클라이언트 -> 서버: /app/chat.addUser
-    // 서버 -> 클라이언트: /topic/public
-    @MessageMapping("/chat.addUser")
-    @SendTo("/topic/public")
-    public ChatMessage addUser(ChatMessage message) {
-        return chatService.processMessage(message);
+    @MessageMapping("/chat/message")
+    public void message(ChatMessage message) {
+        if (ChatMessage.MessageType.JOIN.equals(message.getType())) {
+            message.setContent(message.getSender() + "님이 입장하셨습니다.");
+        }
+        messagingTemplate.convertAndSend("/topic/room/" + message.getRoomId(), message);
     }
 }
